@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TopLearn.Core.Services;
+using TopLearn.Core.Services.Interface;
 using TopLearn.DataLayer.Context;
 
 namespace TopLern.Web
@@ -33,6 +35,13 @@ namespace TopLern.Web
                 options.UseSqlServer(Configuration.GetConnectionString("TopLearnConnection"));
             }
             );
+
+            #endregion
+
+
+            #region IoC
+
+            services.AddTransient<IUserService, UserService>();
 
             #endregion
         }
