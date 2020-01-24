@@ -20,7 +20,7 @@ namespace TopLearn.Web.Controllers
             _userService = userService;
         }
 
-
+        #region Register 
         [Route("register")]
         public IActionResult Register()
         {
@@ -61,7 +61,59 @@ namespace TopLearn.Web.Controllers
             //TODO: Register User
             _userService.AddUser(user);
 
+
+
+            //TODO: Send Email
+
             return View("SuccessRegister",user);
+
         }
+        #endregion
+
+        #region Login
+        [Route("Login")]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        [Route("Login")]
+        public IActionResult Login(LoginViewModel login)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(login);
+            }
+            var user = _userService.LoginUser(login);
+            if (user != null)
+            {
+                if (user.IsActive)
+                {
+                    ViewBag.IsSuccess = true;
+                    return View();
+                }
+                else
+                {
+                    ModelState.AddModelError("Email", "حساب کاربری شما فعال نمی باشد");
+
+                }
+            }
+            ModelState.AddModelError("Email", "کااربری با این مشخصات یافت نشد.");
+            return View(login);
+        }
+        #endregion
+
+
+        #region Active Account
+
+        public IActionResult ActiveAccount(string id)
+        {
+            ViewBag.IsActive = _userService.ActiveAccount(id);
+            return View();
+        }
+
+        #endregion
     }
 }
