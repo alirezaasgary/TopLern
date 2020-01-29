@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -28,6 +29,25 @@ namespace TopLern.Web
         {
             services.AddMvc();
 
+
+            #region Authentication
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+            }).AddCookie(options =>
+            {
+                options.LoginPath = "/Login";
+                options.LogoutPath = "/Logout";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(43200);
+
+            });
+
+            #endregion
+
             #region DataBase Context
 
             services.AddDbContext<TopLearnContext>(options =>
@@ -37,7 +57,6 @@ namespace TopLern.Web
             );
 
             #endregion
-
 
             #region IoC
 
@@ -54,8 +73,9 @@ namespace TopLern.Web
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvcWithDefaultRoute();  //با این کد رازور پیج ها نیز فعال شده اند
             app.UseStaticFiles(); //  open access folder wwwroot
+
+            app.UseMvcWithDefaultRoute();  //با این کد رازور پیج ها نیز فعال شده اند
 
 
             app.Run(async (context) =>
