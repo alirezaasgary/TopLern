@@ -12,6 +12,11 @@ namespace TopLearn.Core.Services.Interfaces
        bool IsExistEmail(string email);
        int AddUser(User user);
        User LoginUser(LoginViewModel login);
-       bool ActiveAccount(string activeCode);
+       User GetUserByEmail(string email);
+        User GetUserByActiveCode(string activeCode);
+        void UpdateUser(User user);
+        bool ActiveAccount(string activeCode);
+
+
    }
 }
