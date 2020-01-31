@@ -91,5 +91,15 @@ namespace TopLearn.Core.Services
             return information;
 
         }
+
+        public SideBarUserPanelViewModel GetSideBarUserPanelData(string username)
+        {
+            return _context.Users.Where(u => u.UserName == username).Select(u => new SideBarUserPanelViewModel()
+            {
+                UserName = u.UserName,
+                ImageName = u.UserAvatar,
+                RegisterDate = u.RegisterDate
+            }).Single();
+        }
     }
 }
