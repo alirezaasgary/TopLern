@@ -45,13 +45,13 @@ namespace TopLearn.Web.Controllers
             
             if (_userService.IsExistUserName(register.UserName))
             {
-                ModelState.AddModelError("UserName","نام کاربری معتبر نمی باشد");
+                ModelState.AddModelError("UserName","نام کاربری تکراری میباشد");
                 return View(register);
             }
 
             if (_userService.IsExistEmail(FixedText.FixEmail(register.Email)))
             {
-                ModelState.AddModelError("Email", "ایمیل معتبر نمی باشد");
+                ModelState.AddModelError("Email", "با این ایمیل قبلا ثبت نام شده اید");
                 return View(register);
             }
 
