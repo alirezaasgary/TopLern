@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TopLearn.Core.Convertors;
 using TopLearn.Core.Services;
 using TopLearn.Core.Services.Interfaces;
 using TopLearn.DataLayer.Context;
@@ -61,6 +62,7 @@ namespace TopLearn.Web
             #region IoC
 
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IViewRenderService, RenderViewToString>();
 
             #endregion
         }
@@ -74,8 +76,16 @@ namespace TopLearn.Web
             }
             app.UseStaticFiles();
             app.UseAuthentication();
-            app.UseMvcWithDefaultRoute();
-            
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "areas",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+
+                );
+                routes.MapRoute("Default", "{controller=Home}/{action=Index}/{id?}");
+            });
 
             app.Run(async (context) =>
             {

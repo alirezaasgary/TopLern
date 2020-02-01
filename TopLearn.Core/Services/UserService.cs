@@ -58,5 +58,48 @@ namespace TopLearn.Core.Services
 
             return true;
         }
+
+        public User GetUserByEmail(string email)
+        {
+            return _context.Users.SingleOrDefault(u => u.Email == email);
+        }
+
+        public User GetUserByActiveCode(string activeCode)
+        {
+            return _context.Users.SingleOrDefault(u => u.ActiveCode == activeCode);
+        }
+
+        public void UpdateUser(User user)
+        {
+            _context.Update(user);
+            _context.SaveChanges();
+        }
+
+        public User GetUserByUserName(string username)
+        {
+            return _context.Users.SingleOrDefault(u => u.UserName == username);
+        }
+        public InformationUserViewModel GetUserInformation(string username)
+        {
+            var user = GetUserByUserName(username);
+            InformationUserViewModel information = new InformationUserViewModel();
+            information.UserName = user.UserName;
+            information.Email = user.Email;
+            information.RegisterDate = user.RegisterDate;
+            information.Wallet = 0;
+
+            return information;
+
+        }
+
+        public SideBarUserPanelViewModel GetSideBarUserPanelData(string username)
+        {
+            return _context.Users.Where(u => u.UserName == username).Select(u => new SideBarUserPanelViewModel()
+            {
+                UserName = u.UserName,
+                ImageName = u.UserAvatar,
+                RegisterDate = u.RegisterDate
+            }).Single();
+        }
     }
 }
